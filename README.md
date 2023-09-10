@@ -13,6 +13,13 @@ $ npm install
 $ npx prisma migrate dev --name dev
 ```
 
+## See saved data
+
+```bash
+# prisma ORM interface
+$ npx prisma studio
+```
+
 ## Running the app
 
 ```bash
