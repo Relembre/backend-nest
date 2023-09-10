@@ -97,7 +97,7 @@ export class UsersController {
         return this.userService.procurarPorEmail(email)
     }
 
-    @Post()
+    @Post("login")
     @HttpCode(200)
     @ApiResponse({
         status: 200,
