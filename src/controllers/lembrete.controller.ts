@@ -22,7 +22,7 @@ export class LembreteController {
         return this.lembreteService.findLembreteByUserId(id)
     }
 
-    @Put(":id")
+    @Put(":id/")
     update(@Param("id") id: number, @Body() dto: CreateMedicationRemind) {
         return this.lembreteService.updateReminder(id, dto)
     }

@@ -8,9 +8,17 @@ Este website é uma fonte de apoio e informações essenciais destinada a indiv�
 
 ## Installation (Configure o mysql no .env)
 
+#### Crie um banco de dados com nome `relembre`
+
+#### No arquivo .env, configure de acordo com o seu servidor de MYSQL
+
+#### Exemplo: DATABASE_URL="mysql://${userMysql}:{senhaMysql}@localhost:3306/relembre"
+
+#### Por padrão, se utilizar o xampp utilize assim: DATABASE_URL="mysql://root:@localhost:3306/relembre"
+
 ```bash
 $ npm install
-$ npx prisma migrate dev --name dev
+$ npx prisma db push
 ```
 
 ## See saved data
@@ -29,6 +37,10 @@ $ npm run start
 # watch mode
 $ npm run start:dev
 ```
+
+##### Se quiser alterar a frequência de envio de email de lembrete, vá no src\services\lembreteMedicamento\lembrete-medicamento.jobs.ts e altere a frequencia na anotação @Cron("10 \* \* \* \* "), veja na internet quando você quer colocar... Exemplo: a cada 1 minuto @Cron(" 1 \* \* \* \* ")
+
+#### Site de ajuda: https://crontab.cronhub.io/
 
 ## API Docs -> http://localhost:3000/docs
 
