@@ -97,6 +97,27 @@ export class UsersController {
         return this.userService.procurarPorEmail(email)
     }
 
+
+
+    @Get("email/:email/recuperarSenha")
+    @ApiResponse({
+        status: 200,
+        description: 'Email sended',
+    })
+    @HttpCode(202)
+    sendRecoveryPassword(
+        @Param("email") email: string
+    ) {
+        return this.userService.enviarSenhaEmail(email)
+    }
+
+    @Post()
+    save(
+        @Body() dto: CreateUserDto
+    ) {
+        return this.userService.salvar({ ...dto })
+    }
+
     @Post("login")
     @HttpCode(200)
     @ApiResponse({
@@ -116,25 +137,6 @@ export class UsersController {
         @Body() dto: LoginUserDto
     ) {
         return this.userService.login(dto.email, dto.senha)
-    }
-
-    @Get("email/:email/recuperarSenha")
-    @ApiResponse({
-        status: 200,
-        description: 'Email sended',
-    })
-    @HttpCode(202)
-    sendRecoveryPassword(
-        @Param("email") email: string
-    ) {
-        return this.userService.enviarSenhaEmail(email)
-    }
-
-    @Post()
-    save(
-        @Body() dto: CreateUserDto
-    ) {
-        return this.userService.salvar({ ...dto })
     }
 
 }

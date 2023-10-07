@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, MaxLength } from "class-validator"
+import { IsEnum, IsNotEmpty, MaxLength } from "class-validator"
 import { DiaSemana } from "src/models/dia-semana.model"
 
 export class CreateMedicationRemind {
@@ -9,7 +9,7 @@ export class CreateMedicationRemind {
     descricao: string
     @IsNotEmpty()
     @ApiProperty({
-        enum: DiaSemana
+        enum: [1, 2, 3, 4, 5, 6, 7]
     })
     diaSemanaLembrete: DiaSemana
     @IsNotEmpty()
