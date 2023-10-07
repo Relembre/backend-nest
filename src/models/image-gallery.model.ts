@@ -3,7 +3,7 @@ import { UserModel } from "./user.model";
 export class ImageGalleryModel {
 
     id?: number;
-    imagem: string;
+    imagem: any;
     descricao: string;
 
     userId?: number

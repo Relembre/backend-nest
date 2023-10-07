@@ -9,8 +9,7 @@ import { MailerService } from "@nestjs-modules/mailer";
 @Injectable()
 export class UserService {
 
-    constructor(private readonly prisma: PrismaService,
-        private readonly mailService: MailerService) { }
+    constructor(private readonly prisma: PrismaService) { }
 
     async procurarTodos(): Promise<ReadUserDto[]> {
         return (await this.prisma.user.findMany()).map(UserMapper.modelToDtoWithNoPass)
@@ -33,6 +32,11 @@ export class UserService {
     }
 
     async salvar(dto: CreateUserDto): Promise<ReadUserDto> {
+        const userExists = await this.procurarPorEmail(dto.email);
+        if (userExists) {
+            throw new HttpException("Email ja cadastrado", HttpStatus.CONFLICT)
+        }
+
         const createdUser = await this.prisma.user.create({
             data: {
                 ...dto
@@ -64,17 +68,17 @@ export class UserService {
             }
         })
 
-        await this.mailService.sendMail({
-            from: 'relembre@gmail.com',
-            to: email,
-            subject: "Esqueci minha senha - Relembre",
-            html: `
-            <html style='font-family: sans-serif; color: #333;padding: 8px;'> 
-                <h1>Ola ${user.nome}, tudo bem?</h1><br>
-                <p>Viemos te ajudar com sua senha, tome cuidado e guarde em um lugar seguro</p>
-                <p>Sua senha é: ${user.senha}</p>
-            </html>`
-        })
+        // await this.mailService.sendMail({
+        //     from: 'relembre@gmail.com',
+        //     to: email,
+        //     subject: "Esqueci minha senha - Relembre",
+        //     html: `
+        //     <html style='font-family: sans-serif; color: #333;padding: 8px;'> 
+        //         <h1>Ola ${user.nome}, tudo bem?</h1><br>
+        //         <p>Viemos te ajudar com sua senha, tome cuidado e guarde em um lugar seguro</p>
+        //         <p>Sua senha é: ${user.senha}</p>
+        //     </html>`
+        // })
 
     }
 }

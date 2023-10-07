@@ -22,7 +22,7 @@ model User {
 model ImagemGaleria {
   id        Int    @id @default(autoincrement())
   descricao String
-  imagem    String
+  imagem    Bytes  @db.LongBlob
   user      User   @relation(fields: [userId], references: [id])
   userId    Int
 }
@@ -30,7 +30,9 @@ model ImagemGaleria {
 model LembreteMedicamento {
   id        Int    @id @default(autoincrement())
   descricao String
+  nome      String
   diaSemana Int
+  horario   String
   user      User   @relation(fields: [userId], references: [id])
   userId    Int
 }

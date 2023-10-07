@@ -14,11 +14,11 @@ export class ImageGalleryService {
     async create(idUser: number, { descricao, imagem }: CreateImageGalleryDto): Promise<ImageGalleryModel> {
 
         this.logger.log(`Adding image gallery into user id ${idUser}`)
+        const imgBytes = Buffer.from(imagem)
         const imageGallery = {
             descricao,
-            imagem,
+            imagem: imgBytes
         }
-
         return await this.prisma.imagemGaleria.create({
             data: {
                 ...imageGallery,
@@ -33,10 +33,17 @@ export class ImageGalleryService {
 
     async findAllImagesByUser(id: number): Promise<ImageGalleryModel[]> {
         this.logger.log(`Finding images from User id ${id}`)
-        return await this.prisma.imagemGaleria.findMany({
+        const data = await this.prisma.imagemGaleria.findMany({
             where: {
                 userId: +id
             }
         })
+
+        return data.map((val => {
+            return {
+                ...val,
+                imagem: val.imagem.toString()
+            }
+        }))
     }
 }

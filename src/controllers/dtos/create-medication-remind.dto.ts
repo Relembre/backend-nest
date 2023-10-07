@@ -12,4 +12,11 @@ export class CreateMedicationRemind {
         enum: DiaSemana
     })
     diaSemanaLembrete: DiaSemana
+    @IsNotEmpty()
+    @ApiProperty()
+    horario: string
+
+    @IsNotEmpty()
+    @ApiProperty()
+    nome: string
 }

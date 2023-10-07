@@ -4,7 +4,7 @@ import { IsNotEmpty } from "class-validator";
 export class CreateImageGalleryDto {
     @IsNotEmpty()
     @ApiProperty()
-    imagem: string;
+    imagem: any;
     @ApiProperty()
     descricao: string;
 }

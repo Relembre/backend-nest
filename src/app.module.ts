@@ -16,28 +16,29 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 
 @Module({
   imports: [ConfigModule.forRoot(), ScheduleModule.forRoot(),
-  MailerModule.forRoot({
-    transport: {
-      host: "sandbox.smtp.mailtrap.io",
-      port: 2525,
-      ignoreTLS: true,
-      secure: false,
-      auth: {
-        user: process.env.LOGIN_MAIL,
-        pass: process.env.PASS_MAIL,
-      },
-    },
-    defaults: {
-      from: '"Relebre APP" <relembreapp@gmail.com>',
-    },
-    template: {
-      dir: __dirname + '/templates',
-      adapter: new EjsAdapter(),
-      options: {
-        strict: true,
-      },
-    },
-  }),],
+    // MailerModule.forRoot({
+    //   transport: {
+    //     host: "sandbox.smtp.mailtrap.io",
+    //     port: 2525,
+    //     ignoreTLS: true,
+    //     secure: false,
+    //     auth: {
+    //       user: process.env.LOGIN_MAIL,
+    //       pass: process.env.PASS_MAIL,
+    //     },
+    //   },
+    //   defaults: {
+    //     from: '"Relebre APP" <relembreapp@gmail.com>',
+    //   },
+    //   template: {
+    //     dir: __dirname + '/templates',
+    //     adapter: new EjsAdapter(),
+    //     options: {
+    //       strict: true,
+    //     },
+    //   },
+    // }),],
+  ],
   controllers: [UsersController, LembreteController, ImageGalleryController],
   providers: [UserService, PrismaService, SendgridService, LembreteMedicamentoService, ImageGalleryService, LembreteMedicamentoJobs],
 })

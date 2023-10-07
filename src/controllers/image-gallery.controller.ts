@@ -10,8 +10,9 @@ export class ImageGalleryController {
     }
 
     @Get(":id")
-    findImagesGalleryByIdUser(@Param("id") id: number) {
-        return this.imageGalleryService.findAllImagesByUser(id)
+    async findImagesGalleryByIdUser(@Param("id") id: number) {
+        const data = await this.imageGalleryService.findAllImagesByUser(id)
+        return data
     }
 
     @Post(":id")
