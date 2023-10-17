@@ -13,7 +13,7 @@ export class LembreteMedicamentoJobs {
         private readonly userService: UserService) { }
 
 
-    @Cron("10 * * * * *")
+    @Cron("* 2 * * * *")
     async addJobEnviarEmailLembreteMedicamento() {
         const lembretes = await this.lembreteService.findAll()
         this.logger.log(`Buscando todos os lembretes, total: ${lembretes.length}`);
@@ -29,7 +29,6 @@ export class LembreteMedicamentoJobs {
                     html: `
                         <style>
                             body {
-                                width: 100%;
                                 font-family: sans-serif;
                                 color: #333;
                             }
@@ -42,10 +41,11 @@ export class LembreteMedicamentoJobs {
                         </style>
                         <body>
                             <div>
-                                <h3>Lembrete de medicação de uso</h3>
+                                <h2>Lembrete de medicação de uso</h2>
                                 <p>Olá ${user.nome}, tudo bem?</p>
                                 <p>Viemos aqui para lembrar você para tomar seu medicamento que você deixou agendados todas as ${this.diasSemana.at(item.diaSemana - 1)}</p>
-                                <strong>Detalhes: </strong>
+                                <hr />
+                                <h4>Detalhes: </h4>
                                 <p><strong>Medicamento </strong>: ${item.nome}</p>
                                 <p><strong>Descrição</strong>: ${item.descricao}</p>
                                 <p><strong>Horário</strong>: ${item.horario}</p>

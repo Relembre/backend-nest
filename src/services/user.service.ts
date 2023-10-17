@@ -5,11 +5,12 @@ import { CreateUserDto } from "src/controllers/dtos/create-user.dto";
 import { UserMapper } from "src/mappers/user.mapper";
 import { ReadUserDto } from "src/controllers/dtos/read-user.dto";
 import { MailerService } from "@nestjs-modules/mailer";
+import { NotFoundError } from "rxjs";
 
 @Injectable()
 export class UserService {
 
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(private readonly prisma: PrismaService, private readonly mailerService: MailerService) { }
 
     async procurarTodos(): Promise<ReadUserDto[]> {
         return (await this.prisma.user.findMany()).map(UserMapper.modelToDtoWithNoPass)
@@ -67,18 +68,35 @@ export class UserService {
                 email
             }
         })
+            .catch(err => {
+                throw new HttpException(`Usuario nao encontrado, ${JSON.stringify(err)}`, HttpStatus.NOT_FOUND)
+            })
 
-        // await this.mailService.sendMail({
-        //     from: 'relembre@gmail.com',
-        //     to: email,
-        //     subject: "Esqueci minha senha - Relembre",
-        //     html: `
-        //     <html style='font-family: sans-serif; color: #333;padding: 8px;'> 
-        //         <h1>Ola ${user.nome}, tudo bem?</h1><br>
-        //         <p>Viemos te ajudar com sua senha, tome cuidado e guarde em um lugar seguro</p>
-        //         <p>Sua senha é: ${user.senha}</p>
-        //     </html>`
-        // })
+        await this.mailerService.sendMail({
+            from: 'relembre@gmail.com',
+            to: email,
+            subject: "Esqueci minha senha - Relembre",
+            html: `
+            <html>
+                <style>
+                body {
+                    font-family: sans-serif;
+                    color: #333;
+                }
+                div {
+                    margin: 0 auto;
+                    padding: 16px;
+                    border-radius: 4px;
+                    border: 1px solid #4448;
+                }
+            </style> 
+            <div>
+                <h2>Ola ${user.nome}, tudo bem?</h2>
+                <p>Viemos te ajudar com sua senha, tome cuidado e guarde em um lugar seguro</p>
+                    <p>Sua senha é: <strong>${user.senha}</strong></p>
+            </div>
+            </html>`
+        })
 
     }
 }
