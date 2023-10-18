@@ -33,18 +33,20 @@ export class UserService {
     }
 
     async salvar(dto: CreateUserDto): Promise<ReadUserDto> {
-        const userExists = await this.procurarPorEmail(dto.email);
-        if (userExists) {
-            throw new HttpException("Email ja cadastrado", HttpStatus.CONFLICT)
+        try {
+            const userExists = await this.procurarPorEmail(dto.email);
+            if (userExists) {
+                throw new HttpException("Email ja cadastrado", HttpStatus.CONFLICT)
+            }
+        } catch (err) {
+            const createdUser = await this.prisma.user.create({
+                data: {
+                    ...dto
+                }
+            })
+            return UserMapper.modelToDtoWithNoPass(createdUser);
         }
 
-        const createdUser = await this.prisma.user.create({
-            data: {
-                ...dto
-            }
-        })
-
-        return UserMapper.modelToDtoWithNoPass(createdUser);
     }
 
     async login(email: string, senha: string): Promise<ReadUserDto> {
